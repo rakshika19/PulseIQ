@@ -40,6 +40,9 @@ export const authAPI = {
         username: userData.name || userData.username,
         email: userData.email,
         password: userData.password,
+        dob: userData.dob,
+        bloodGroup: userData.bloodGroup,
+        gender: userData.gender,
       }),
     });
     return response;
