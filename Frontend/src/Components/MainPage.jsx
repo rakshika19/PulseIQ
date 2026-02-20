@@ -16,6 +16,7 @@ import {
   ClipboardListIcon,
   Activity,
   MessageCircle,
+  ListChecks,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -110,6 +111,17 @@ const ACTION_CARDS = [
     border: "border-orange-100",
     tag: "New",
     tagColor: "bg-orange-50 text-orange-600",
+  },
+  {
+    id: "assessment",
+    icon: ListChecks,
+    label: "Assessment",
+    desc: "CBT, DBT & PHQ-9 based questionnaires to understand your mental wellness and get personalized insights.",
+    iconBg: "bg-teal-100",
+    iconColor: "text-teal-600",
+    border: "border-teal-100",
+    tag: "New",
+    tagColor: "bg-teal-50 text-teal-600",
   },
 ];
 
@@ -217,6 +229,7 @@ export default function MainPage({
       upload: "/upload-report",
       appointment: "/appointment",
       fitness: "/fitness-dashboard",
+      assessment: "/assessment",
     };
 
     if (routes[id]) {

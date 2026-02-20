@@ -9,6 +9,7 @@ import DoctorAppointment from './Components/DoctorAppointment.jsx';
 import FitnessDashboard from './Components/FitnessDashboard.jsx';
 import ChatBot from './Components/ChatBot.jsx';
 import UserReportUpload from './Components/UserReportUpload.jsx';
+import Assessment from './Components/Assessment.jsx';
 
 // Generic auth guard (any logged-in user)
 function ProtectedRoute({ children }) {
@@ -78,6 +79,16 @@ function App() {
         element={
           <PatientRoute>
             <FitnessDashboard />
+          </PatientRoute>
+        }
+      />
+
+      {/* Assessment - CBT, DBT, PHQ-9 */}
+      <Route
+        path="/assessment"
+        element={
+          <PatientRoute>
+            <Assessment />
           </PatientRoute>
         }
       />
