@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const NAV_LINKS = ["Features", "How It Works", "For Doctors", "Security"];
 
@@ -105,7 +106,8 @@ function RiskBar({ pct, colorClass }) {
   );
 }
 
-export default function App() {
+export default function HomePage() {
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [floatY, setFloatY] = useState(0);
@@ -154,10 +156,16 @@ export default function App() {
             ))}
           </nav>
           <div className="hidden md:flex items-center gap-3">
-            <button className="text-sm font-medium text-slate-700 px-4 py-2 rounded-lg border border-slate-200 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 transition-all">
+            <button
+              className="text-sm font-medium text-slate-700 px-4 py-2 rounded-lg border border-slate-200 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 transition-all"
+              onClick={() => navigate("/auth?mode=login")}
+            >
               Log In
             </button>
-            <button className="text-sm font-semibold text-white px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 hover:-translate-y-0.5 transition-all shadow-md">
+            <button
+              className="text-sm font-semibold text-white px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 hover:-translate-y-0.5 transition-all shadow-md"
+              onClick={() => navigate("/auth?mode=register&type=user")}
+            >
               Get Started
             </button>
           </div>
@@ -171,8 +179,18 @@ export default function App() {
           <div className="md:hidden bg-white/95 backdrop-blur-md border-t border-blue-50 px-6 py-4 flex flex-col gap-4">
             {NAV_LINKS.map((l) => <a key={l} href="#" className="text-slate-700 font-medium">{l}</a>)}
             <div className="flex gap-3 pt-2">
-              <button className="flex-1 text-sm border border-slate-200 rounded-lg py-2 text-slate-700">Log In</button>
-              <button className="flex-1 text-sm bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl py-2 font-semibold">Get Started</button>
+              <button
+                className="flex-1 text-sm border border-slate-200 rounded-lg py-2 text-slate-700"
+                onClick={() => navigate("/auth?mode=login")}
+              >
+                Log In
+              </button>
+              <button
+                className="flex-1 text-sm bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl py-2 font-semibold"
+                onClick={() => navigate("/auth?mode=register&type=user")}
+              >
+                Get Started
+              </button>
             </div>
           </div>
         )}
@@ -200,11 +218,17 @@ export default function App() {
               Detect health risks months before symptoms appear. Our AI continuously monitors your health signals to prevent serious illness — not just treat it.
             </p>
             <div className="flex flex-wrap gap-4 mb-10">
-              <button className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold px-7 py-3.5 rounded-xl flex items-center gap-2 text-sm hover:from-blue-700 hover:to-cyan-600 hover:-translate-y-0.5 transition-all shadow-lg shadow-blue-200">
+              <button
+                className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold px-7 py-3.5 rounded-xl flex items-center gap-2 text-sm hover:from-blue-700 hover:to-cyan-600 hover:-translate-y-0.5 transition-all shadow-lg shadow-blue-200"
+                onClick={() => navigate("/auth?mode=register&type=user")}
+              >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                 I am a Patient
               </button>
-              <button className="bg-white border-2 border-blue-200 text-blue-700 font-semibold px-7 py-3.5 rounded-xl hover:border-blue-400 hover:bg-blue-50 transition-all flex items-center gap-2 text-sm">
+              <button
+                className="bg-white border-2 border-blue-200 text-blue-700 font-semibold px-7 py-3.5 rounded-xl hover:border-blue-400 hover:bg-blue-50 transition-all flex items-center gap-2 text-sm"
+                onClick={() => navigate("/auth?mode=register&type=doctor")}
+              >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                 I am a Doctor
               </button>
@@ -575,10 +599,16 @@ export default function App() {
               Join thousands of patients and doctors using AI to stay one step ahead of illness. Free to start — no commitments.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <button className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold px-9 py-4 rounded-xl text-base hover:from-blue-700 hover:to-cyan-600 hover:-translate-y-0.5 transition-all shadow-lg shadow-blue-200">
+              <button
+                className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold px-9 py-4 rounded-xl text-base hover:from-blue-700 hover:to-cyan-600 hover:-translate-y-0.5 transition-all shadow-lg shadow-blue-200"
+                onClick={() => navigate("/auth?mode=register&type=user")}
+              >
                 Sign Up Free
               </button>
-              <button className="bg-white border-2 border-blue-200 text-blue-700 font-semibold px-9 py-4 rounded-xl hover:border-blue-400 hover:bg-blue-50 transition-all text-base">
+              <button
+                className="bg-white border-2 border-blue-200 text-blue-700 font-semibold px-9 py-4 rounded-xl hover:border-blue-400 hover:bg-blue-50 transition-all text-base"
+                onClick={() => navigate("/auth?mode=login")}
+              >
                 Log In
               </button>
             </div>
