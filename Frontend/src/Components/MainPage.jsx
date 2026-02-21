@@ -69,6 +69,17 @@ const ACTION_CARDS = [
     tagColor: "",
   },
   {
+    id: "digital-twin",
+    icon: Activity,
+    label: "Digital Twin Dashboard",
+    desc: "AI analysis of your health conversations - get personalized health insights and risk alerts.",
+    iconBg: "bg-cyan-100",
+    iconColor: "text-cyan-600",
+    border: "border-cyan-100",
+    tag: "NEW",
+    tagColor: "bg-cyan-500",
+  },
+  {
     id: "risk",
     icon: ShieldAlert,
     label: "View Health Risk Summary",
@@ -227,6 +238,7 @@ export default function MainPage({
     const routes = {
       chat: "/chat",
       upload: "/upload-report",
+      "digital-twin": "/digital-twin",
       appointment: "/appointment",
       fitness: "/fitness-dashboard",
       assessment: "/assessment",

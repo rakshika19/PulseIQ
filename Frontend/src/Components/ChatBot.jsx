@@ -98,6 +98,15 @@ export default function ChatBot() {
       };
 
       setMessages((prev) => [...prev, botMessage]);
+
+      // 💾 Save chat to backend for digital twin analysis
+      try {
+        await mlAPI.saveChat(userId, userMessage.text, response.final_response, response.personalized_mode);
+        console.log("Chat saved to digital twin");
+      } catch (saveErr) {
+        console.error("Error saving chat:", saveErr);
+        // Don't show error to user, just log it
+      }
     } catch (err) {
       console.error("Chat error details:", err);
       setError(err.message || "Failed to get response. Please try again.");

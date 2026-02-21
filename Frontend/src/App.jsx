@@ -11,6 +11,7 @@ import FitnessDashboard from './Components/FitnessDashboard.jsx';
 import ChatBot from './Components/ChatBot.jsx';
 import UserReportUpload from './Components/UserReportUpload.jsx';
 import Assessment from './Components/Assessment.jsx';
+import DigitalTwinDashboard from './Components/DigitalTwinDashboard.jsx';
 import { getCurrentUser } from './store/authSlice.js';
 
 // Generic auth guard (any logged-in user)
@@ -122,6 +123,16 @@ function App() {
         element={
           <ProtectedRoute>
             <UserReportUpload />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Digital Twin Dashboard */}
+      <Route
+        path="/digital-twin"
+        element={
+          <ProtectedRoute>
+            <DigitalTwinDashboard />
           </ProtectedRoute>
         }
       />
