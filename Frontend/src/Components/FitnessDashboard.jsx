@@ -16,6 +16,7 @@ import { Bar, Line, Doughnut } from "react-chartjs-2";
 import { motion, AnimatePresence } from "framer-motion";
 import { Activity, Heart, Flame, Moon, RefreshCw, TrendingUp, Zap, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import AppNavbar from "./AppNavbar";
 import "./FitnessDashboard.css";
 
 ChartJS.register(
@@ -235,6 +236,7 @@ const FitnessDashboard = () => {
 
   return (
     <div className="fitness-dashboard">
+      <AppNavbar />
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
