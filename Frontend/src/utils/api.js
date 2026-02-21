@@ -115,7 +115,7 @@ const ML_API_BASE_URL = import.meta.env.VITE_ML_API_BASE_URL || 'http://localhos
 // ML API functions for chatbot and report upload
 export const mlAPI = {
   // Chat with AI health assistant
-  chat: async (userId, question) => {
+  chat: async (userId, question, watchData = null) => {
     const url = `${ML_API_BASE_URL}/chat/`;
     
     try {
@@ -127,6 +127,7 @@ export const mlAPI = {
         body: JSON.stringify({
           user_id: String(userId),
           question: question,
+          watch_data: watchData || null,
         }),
       });
 

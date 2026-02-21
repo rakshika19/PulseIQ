@@ -4,6 +4,7 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
 import os
+from typing import Optional
 from pydantic import BaseModel
 from database import SessionLocal, UserDocument, UserChunk, GlobalDocument, GlobalChunk
 from utils.global_vector_store import append_to_global_index
@@ -38,6 +39,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 class ChatRequest(BaseModel):
     user_id: str
     question: str
+    watch_data: Optional[dict] = None  # Real-time watch/fitness data
 
 
 # ✅ Health Check Endpoint
@@ -72,7 +74,8 @@ async def chat_with_medical_history(request: ChatRequest):
     prompt = build_medical_prompt(
         user_question=request.question,
         user_context=user_context,
-        global_context=global_context
+        global_context=global_context,
+        watch_data=request.watch_data
     )
 
     ai_response = generate_response(prompt)

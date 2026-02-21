@@ -100,6 +100,19 @@ const FitnessDashboard = () => {
 
       setData(body);
 
+      // Save fitness data to localStorage for real-time chat analysis
+      if (body) {
+        localStorage.setItem('fitnessData', JSON.stringify({
+          heartRate: body.heartRate,
+          steps: body.steps,
+          calories: body.calories,
+          sleep: body.sleep,
+          bloodPressure: body.bloodPressure,
+          spO2: body.spO2,
+          temperature: body.temperature,
+        }));
+      }
+
       // Generate heart rate history
       if (body.heartRate) {
         const history = Array.from({ length: 7 }, (_, i) => ({
