@@ -6,7 +6,7 @@ import { ApiError } from "../utils/ApiError.js";
 
 // ─── Get All Doctors ──────────────────────────────────────────────────────────
 const getAllDoctors = asyncHandler(async (req, res) => {
-  const doctors = await Doctor.find({ isVerified: true })
+  const doctors = await Doctor.find()
     .populate("userId", "username email")
     .select(
       "userId specialization experience clinicAddress clinicTiming consultationFee qualifications bio isVerified createdAt"

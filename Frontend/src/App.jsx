@@ -6,7 +6,7 @@ import HomePage from './Components/HomePage.jsx';
 import AuthPage from './Components/Register.jsx';
 import MainPage from './Components/MainPage.jsx';
 import DoctorAppointment from './Components/DoctorAppointment.jsx';
-
+import AppointmentBooking from './Components/Appointmentbooking.jsx';
 import FitnessDashboard from './Components/FitnessDashboard.jsx';
 import ChatBot from './Components/ChatBot.jsx';
 import UserReportUpload from './Components/UserReportUpload.jsx';
@@ -74,6 +74,8 @@ function App() {
           </ProtectedRoute>
         }
       />
+      {/* Appointment Booking */}
+         <Route path="/appointment-booking" element={<ProtectedRoute><AppointmentBooking /></ProtectedRoute>} />  
 
       {/* Medication Adherence Assistant */}
       <Route
@@ -97,7 +99,7 @@ function App() {
 
    
 
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<Navigate to="/main" replace />} />
     </Routes>
   );
 }

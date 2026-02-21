@@ -200,11 +200,15 @@ const loginUser = asyncHandler(async (req, res) => {
   };
 
   return res
-    .status(200)
-    .cookie("token", token, cookieOptions)
-    .json(
-      new ApiResponse(200, { user: safeUser }, "Logged in successfully")
-    );
+  .status(200)
+  .cookie("token", token, cookieOptions)
+  .json(
+    new ApiResponse(
+      200,
+      { user: safeUser, accessToken: token },
+      "Logged in successfully"
+    )
+  );
 });
 
 // ─── Logout ───────────────────────────────────────────────────────────────────

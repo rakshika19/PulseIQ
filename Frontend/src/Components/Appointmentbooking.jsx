@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import {
   Search,
   Star,
@@ -20,6 +20,7 @@ import {
   FileText,
   ArrowRight,
   Shield,
+  Loader
 } from "lucide-react";
 
 // ─── Static Data ──────────────────────────────────────────────────────────────
@@ -239,8 +240,48 @@ function BookingModal({ doctor, onClose, onConfirm }) {
   const [consultType, setConsultType] = useState(doctor.type[0]);
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({ name: "Sarah Mitchell", phone: "", reason: "" });
-
+const [bookingLoading, setBookingLoading] = useState(false);
   const canProceed = selectedSlot !== null;
+
+   const handleConfirmBooking = async () => {
+    try {
+      setBookingLoading(true);
+
+      const bookingDate = new Date(days[selectedDay].full);
+
+      const response = await fetch("http://localhost:5000/api/v1/appointments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+        body: JSON.stringify({
+          doctorId: doctor.doctorId,
+          patientPhoneNumber: form.phone,
+          appointmentDate: bookingDate.toISOString(),
+          appointmentTime: selectedSlot,
+          reason: form.reason,
+          mode: consultType === "video" ? "online" : "offline_visit",
+        }),
+      });
+
+      const data = await response.json();
+      console.log("Booking response:", data);
+
+      if (response.ok) {
+        alert("✅ Appointment booked! Doctor will see it on their dashboard.");
+        onConfirm();
+        onClose();
+      } else {
+        alert("❌ " + data.message);
+      }
+    } catch (err) {
+      console.error("Booking error:", err);
+      alert("Error: " + err.message);
+    } finally {
+      setBookingLoading(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -424,9 +465,14 @@ function BookingModal({ doctor, onClose, onConfirm }) {
               </div>
               <div className="flex gap-3">
                 <button onClick={() => setStep(2)} className="flex-1 py-3 rounded-xl font-semibold text-sm border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all">Back</button>
-                <button onClick={onConfirm} className="flex-1 py-3 rounded-xl font-bold text-sm bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-200 transition-all flex items-center justify-center gap-2">
-                  Pay ₹{doctor.fee} <ArrowRight size={14} />
-                </button>
+                <button
+  onClick={handleConfirmBooking}
+  disabled={bookingLoading}
+  className="flex-1 py-3 rounded-xl font-bold text-sm bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-200 transition-all flex items-center justify-center gap-2"
+>
+  {bookingLoading ? "Processing..." : `Pay ₹${doctor.fee}`}
+</button>
+                
               </div>
             </div>
           )}
@@ -460,13 +506,61 @@ function SuccessToast({ doctor, onClose }) {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function AppointmentBooking({ patientName = "Sarah", onBack }) {
+  const [doctors, setDoctors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
   const [activeSpecialty, setActiveSpecialty] = useState("All");
   const [consultFilter, setConsultFilter] = useState("All");
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [confirmedDoctor, setConfirmedDoctor] = useState(null);
 
-  const filtered = DOCTORS.filter((d) => {
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetch('http://localhost:5000/api/v1/doctors');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch doctors');
+        }
+        
+        const data = await response.json();
+        
+        // Transform backend data to match component format
+        const transformedDoctors = data.data.doctors.map((doc) => ({
+          id: doc._id,
+          name: doc.userId?.username || 'Dr. Unknown',
+          specialty: doc.specialization,
+          hospital: doc.clinicAddress?.city || 'Clinic',
+          location: `${doc.clinicAddress?.city}, ${doc.clinicAddress?.state}`,
+          rating: 4.7, // Backend doesn't have rating, using default
+          reviews: 200, // Backend doesn't have review count
+          experience: `${doc.experience} yrs`,
+          fee: doc.consultationFee || 500,
+          avatar: (doc.userId?.username || 'Dr')[0].toUpperCase() + (doc.userId?.username || 'Dr')[1]?.toUpperCase() || 'D',
+          avatarBg: getRandomGradient(doc._id),
+          type: doc.clinicTiming?.some(t => t.isOpen) ? ["clinic"] : ["video"],
+          available: true,
+          nextSlot: "Today, 3:00 PM", // Backend doesn't provide this
+          tags: [doc.specialization, "Preventive Care"],
+          doctorId: doc._id, // Store for booking
+        }));
+        
+        setDoctors(transformedDoctors);
+      } catch (err) {
+        setError(err.message);
+        console.error('Error fetching doctors:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDoctors();
+  }, []);
+
+  const filtered = doctors.filter((d) => {
     const matchSearch =
       d.name.toLowerCase().includes(search.toLowerCase()) ||
       d.specialty.toLowerCase().includes(search.toLowerCase()) ||
@@ -483,7 +577,7 @@ export default function AppointmentBooking({ patientName = "Sarah", onBack }) {
     setConfirmedDoctor(selectedDoctor);
     setSelectedDoctor(null);
   };
-
+   const specialties = ["All", ...new Set(doctors.map(d => d.specialty))];
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
 
@@ -536,7 +630,9 @@ export default function AppointmentBooking({ patientName = "Sarah", onBack }) {
             </div>
             <div className="flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-xl px-4 py-2">
               <Stethoscope size={14} className="text-blue-600" />
-              <span className="text-blue-700 text-xs font-semibold">{DOCTORS.filter(d => d.available).length} doctors available today</span>
+               <span className="text-blue-700 text-xs font-semibold">
+                {doctors.filter(d => d.available).length} doctors available
+              </span>
             </div>
           </div>
         </div>
@@ -555,23 +651,12 @@ export default function AppointmentBooking({ patientName = "Sarah", onBack }) {
               className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition-all shadow-sm"
             />
           </div>
-          <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl px-3 py-2 shadow-sm">
-            <Filter size={13} className="text-slate-400 flex-shrink-0" />
-            {["All", "Video", "Clinic"].map((f) => (
-              <button
-                key={f}
-                onClick={() => setConsultFilter(f)}
-                className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${consultFilter === f ? "bg-blue-600 text-white" : "text-slate-500 hover:text-blue-600"}`}
-              >
-                {f}
-              </button>
-            ))}
-          </div>
+          
         </div>
 
         {/* ── Specialty chips ── */}
         <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
-          {SPECIALTIES.map((s) => (
+          {specialties.map((s) => (
             <button
               key={s}
               onClick={() => setActiveSpecialty(s)}
@@ -581,6 +666,28 @@ export default function AppointmentBooking({ patientName = "Sarah", onBack }) {
             </button>
           ))}
         </div>
+        {/* ── Loading state ── */}
+        {loading && (
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center">
+              <Loader size={32} className="text-blue-600 animate-spin mx-auto mb-3" />
+              <p className="text-slate-600 font-semibold">Loading doctors...</p>
+            </div>
+          </div>
+        )}
+
+        {/* ── Error state ── */}
+        {error && (
+          <div className="bg-red-50 border border-red-100 rounded-2xl p-5 flex gap-4">
+            <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center flex-shrink-0">
+              <X size={17} className="text-red-600" />
+            </div>
+            <div>
+              <p className="text-slate-800 font-semibold text-sm mb-1">Unable to load doctors</p>
+              <p className="text-slate-500 text-xs">{error}</p>
+            </div>
+          </div>
+        )}
 
         {/* ── Results count ── */}
         <p className="text-slate-400 text-xs font-medium">
@@ -641,4 +748,16 @@ export default function AppointmentBooking({ patientName = "Sarah", onBack }) {
       )}
     </div>
   );
+}
+function getRandomGradient(id) {
+  const gradients = [
+    "from-rose-400 to-pink-500",
+    "from-blue-400 to-indigo-500",
+    "from-purple-400 to-violet-500",
+    "from-amber-400 to-orange-500",
+    "from-emerald-400 to-teal-500",
+    "from-cyan-400 to-blue-500",
+  ];
+  const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return gradients[hash % gradients.length];
 }

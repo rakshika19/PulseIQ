@@ -130,6 +130,9 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         localStorage.setItem('user', JSON.stringify(action.payload.user)); // save user
         state.error = null;
+        if (action.payload.accessToken) {
+    localStorage.setItem("accessToken", action.payload.accessToken);
+  }
       })
       .addCase(registerDoctor.rejected, (state, action) => {
         state.isLoading = false;
@@ -165,6 +168,7 @@ const authSlice = createSlice({
         state.user = null;
         localStorage.removeItem('user'); // clear user
         state.error = null;
+        localStorage.removeItem("accessToken");
       })
       .addCase(logout.rejected, (state, action) => {
         state.isLoading = false;

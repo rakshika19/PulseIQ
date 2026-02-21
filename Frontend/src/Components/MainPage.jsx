@@ -251,7 +251,7 @@ export default function MainPage({
       chat: "/chat",
       upload: "/upload-report",
       "digital-twin": "/digital-twin",
-      appointment: "/appointment",
+      appointment: "/appointment-booking",
       fitness: "/fitness-dashboard",
       assessment: "/assessment",
       skinDetection: "/skin-detection",
