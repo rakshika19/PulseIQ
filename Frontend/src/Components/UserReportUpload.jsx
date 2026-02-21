@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   AlertCircle,
   Loader2,
-  ArrowLeft,
   FileText,
   X,
   Sparkles,
@@ -117,26 +116,24 @@ export default function UserReportUpload() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
-      <header className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-20">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center gap-4">
-          <button
-            onClick={() => navigate("/main")}
-            className="p-2 hover:bg-slate-100 rounded-xl transition-colors"
-          >
-            <ArrowLeft size={20} className="text-slate-600" />
-          </button>
+      <header className="bg-white/70 backdrop-blur-lg border-b border-gray-200/50 sticky top-0 z-20 shadow-sm">
+        <div className="max-w-5xl mx-auto px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-400 flex items-center justify-center shadow-sm">
-              <FileUp size={20} className="text-white" />
+            <div className="relative">
+              <div className="w-11 h-11 rounded-2xl bg-blue-600 flex items-center justify-center shadow-md shadow-blue-500/20">
+                <FileUp size={22} className="text-white" />
+              </div>
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white shadow-sm"></div>
             </div>
             <div>
-              <h1 className="text-slate-800 font-semibold text-sm">
+              <h1 className="text-gray-900 font-bold text-base">
                 Upload Medical Report
               </h1>
-              <p className="text-slate-500 text-xs">
-                Upload your reports for AI-powered analysis
+              <p className="text-gray-500 text-xs flex items-center gap-1.5 mt-0.5">
+                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                Secure AI Analysis
               </p>
             </div>
           </div>
@@ -144,34 +141,56 @@ export default function UserReportUpload() {
       </header>
 
       {/* Main Content */}
-      <div className="max-w-2xl mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto px-6 py-8">
         {/* Info Banner */}
-        <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-6 flex items-start gap-3">
-          <Sparkles size={20} className="text-blue-500 flex-shrink-0 mt-0.5" />
-          <div>
-            <p className="text-blue-800 text-sm font-medium">
-              AI-Powered Report Analysis
-            </p>
-            <p className="text-blue-600 text-xs mt-1">
-              Upload your medical reports (lab results, scans, prescriptions) and our AI will analyze them to provide personalized health insights through the chatbot.
-            </p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="relative bg-white/40 backdrop-blur-xl border border-white/60 rounded-2xl p-6 mb-8 overflow-hidden shadow-xl"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-cyan-500/10"></div>
+          <div className="relative flex items-start gap-4 z-10">
+            <motion.div
+              animate={{ rotate: [0, 10, -10, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="w-12 h-12 rounded-xl bg-blue-600/90 backdrop-blur-md flex items-center justify-center flex-shrink-0 border border-white/20 shadow-lg"
+            >
+              <Sparkles size={24} className="text-white" />
+            </motion.div>
+            <div>
+              <p className="text-gray-900 text-base font-bold mb-2">
+                AI-Powered Report Analysis
+              </p>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                Upload your medical reports (lab results, scans, prescriptions) and our AI will analyze them to provide personalized health insights through the chatbot.
+              </p>
+            </div>
           </div>
-        </div>
+          <div className="absolute top-0 right-0 w-40 h-40 bg-blue-400/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-cyan-400/10 rounded-full blur-2xl"></div>
+        </motion.div>
 
         {/* Upload Area */}
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
           onClick={() => !file && fileInputRef.current?.click()}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          className={`relative bg-white rounded-2xl border-2 border-dashed transition-all duration-200 ${
+          className={`relative bg-white/60 backdrop-blur-xl border-2 border-dashed transition-all duration-300 overflow-hidden shadow-lg ${
             isDragging
-              ? "border-violet-400 bg-violet-50"
+              ? "border-blue-600 bg-blue-50/50 shadow-2xl shadow-blue-500/20 scale-[1.02]"
               : file
-              ? "border-slate-200 cursor-default"
-              : "border-slate-200 hover:border-violet-300 hover:bg-violet-50/50 cursor-pointer"
-          } p-8`}
+              ? "border-gray-300 cursor-default"
+              : "border-gray-300 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 cursor-pointer group"
+          } p-12`}
         >
+          {!file && !isDragging && (
+            <div className="absolute inset-0 bg-blue-50/0 group-hover:bg-blue-50/30 transition-all duration-300"></div>
+          )}
           <input
             ref={fileInputRef}
             type="file"
@@ -187,18 +206,18 @@ export default function UserReportUpload() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="flex flex-col items-center text-center"
+                className="flex flex-col items-center text-center relative z-10"
               >
-                <div className="w-16 h-16 rounded-2xl bg-violet-100 flex items-center justify-center mb-4">
-                  <Upload size={28} className="text-violet-500" />
+                <div className="w-20 h-20 rounded-full bg-blue-600/10 backdrop-blur-md flex items-center justify-center mb-5 border border-blue-600/20">
+                  <Upload size={32} className="text-blue-600" />
                 </div>
-                <p className="text-slate-700 font-medium text-sm mb-1">
+                <p className="text-gray-900 font-semibold text-base mb-2">
                   Drop your PDF file here
                 </p>
-                <p className="text-slate-500 text-xs mb-4">
+                <p className="text-gray-600 text-sm mb-4">
                   or click to browse from your device
                 </p>
-                <p className="text-slate-400 text-xs">
+                <p className="text-gray-400 text-xs">
                   Maximum file size: 10MB • PDF format only
                 </p>
               </motion.div>
@@ -210,14 +229,14 @@ export default function UserReportUpload() {
                 exit={{ opacity: 0 }}
                 className="flex items-center gap-4"
               >
-                <div className="w-14 h-14 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
-                  <FileText size={24} className="text-red-500" />
+                <div className="w-16 h-16 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
+                  <FileText size={28} className="text-red-600" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-slate-700 font-medium text-sm truncate">
+                  <p className="text-gray-900 font-semibold text-sm truncate">
                     {file.name}
                   </p>
-                  <p className="text-slate-500 text-xs">
+                  <p className="text-gray-500 text-sm mt-0.5">
                     {formatFileSize(file.size)}
                   </p>
                 </div>
@@ -227,42 +246,42 @@ export default function UserReportUpload() {
                       e.stopPropagation();
                       handleRemoveFile();
                     }}
-                    className="p-2 hover:bg-slate-100 rounded-xl transition-colors"
+                    className="p-2.5 hover:bg-gray-100 rounded-lg transition-colors"
                   >
-                    <X size={18} className="text-slate-400" />
+                    <X size={20} className="text-gray-400 hover:text-gray-600" />
                   </button>
                 )}
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
 
         {/* Error Message */}
         {error && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-4 bg-red-50 border border-red-100 rounded-xl p-3 flex items-center gap-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3"
           >
-            <AlertCircle size={18} className="text-red-500 flex-shrink-0" />
-            <p className="text-red-600 text-sm">{error}</p>
+            <AlertCircle size={20} className="text-red-600 flex-shrink-0" />
+            <p className="text-red-700 text-sm font-medium">{error}</p>
           </motion.div>
         )}
 
         {/* Success Message */}
         {uploadStatus === "success" && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-4 bg-green-50 border border-green-100 rounded-xl p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-6 bg-green-50 border border-green-200 rounded-lg p-5"
           >
-            <div className="flex items-center gap-2 mb-2">
-              <CheckCircle2 size={18} className="text-green-500" />
-              <p className="text-green-700 font-medium text-sm">
+            <div className="flex items-center gap-3 mb-2">
+              <CheckCircle2 size={22} className="text-green-600" />
+              <p className="text-green-900 font-semibold text-base">
                 Upload Successful!
               </p>
             </div>
-            <p className="text-green-600 text-xs">
+            <p className="text-green-700 text-sm">
               Your medical report has been processed. {uploadResult?.total_chunks_created} sections were analyzed and indexed.
             </p>
           </motion.div>
@@ -271,14 +290,14 @@ export default function UserReportUpload() {
         {/* Upload Button */}
         {file && uploadStatus !== "success" && (
           <motion.button
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             onClick={handleUpload}
             disabled={isUploading}
-            className={`w-full mt-6 py-3 px-4 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2 ${
+            className={`w-full mt-6 py-3.5 px-4 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 shadow-lg ${
               isUploading
-                ? "bg-slate-100 text-slate-400 cursor-not-allowed"
-                : "bg-gradient-to-r from-violet-500 to-purple-500 text-white shadow-sm hover:shadow-md"
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-xl shadow-blue-600/30"
             }`}
           >
             {isUploading ? (
@@ -298,20 +317,20 @@ export default function UserReportUpload() {
         {/* Chat CTA after success */}
         {uploadStatus === "success" && (
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             className="mt-6 space-y-3"
           >
             <button
               onClick={() => navigate("/chat")}
-              className="w-full py-3 px-4 rounded-xl font-medium text-sm bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2"
+              className="w-full py-3.5 px-4 rounded-lg font-semibold text-sm bg-blue-600 text-white hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30"
             >
               <MessageCircle size={18} />
               Ask AI About Your Report
             </button>
             <button
               onClick={handleRemoveFile}
-              className="w-full py-3 px-4 rounded-xl font-medium text-sm bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all"
+              className="w-full py-3 px-4 rounded-lg font-medium text-sm bg-white/60 backdrop-blur-md border-2 border-gray-300 text-gray-700 hover:bg-white transition-colors"
             >
               Upload Another Report
             </button>
@@ -319,11 +338,11 @@ export default function UserReportUpload() {
         )}
 
         {/* Guidelines */}
-        <div className="mt-8 bg-white rounded-2xl border border-slate-100 p-5">
-          <p className="text-slate-700 font-medium text-sm mb-3">
+        <div className="mt-8 bg-white/60 backdrop-blur-xl border border-white/60 rounded-xl p-6 shadow-lg">
+          <p className="text-gray-900 font-semibold text-base mb-4">
             Supported Report Types
           </p>
-          <ul className="space-y-2">
+          <ul className="space-y-2.5">
             {[
               "Blood test results (CBC, metabolic panels)",
               "Imaging reports (X-rays, MRI, CT scans)",
@@ -331,8 +350,8 @@ export default function UserReportUpload() {
               "Prescription and medication records",
               "Discharge summaries",
             ].map((item, index) => (
-              <li key={index} className="flex items-center gap-2 text-slate-500 text-xs">
-                <CheckCircle2 size={14} className="text-green-500 flex-shrink-0" />
+              <li key={index} className="flex items-center gap-3 text-gray-600 text-sm">
+                <CheckCircle2 size={16} className="text-green-600 flex-shrink-0" />
                 {item}
               </li>
             ))}

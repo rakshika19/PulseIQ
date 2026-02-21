@@ -7,7 +7,6 @@ import {
   Bot,
   User,
   Loader2,
-  ArrowLeft,
   Sparkles,
   AlertCircle,
 } from "lucide-react";
@@ -132,27 +131,21 @@ export default function ChatBot() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <header className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-20">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center gap-4">
-          <button
-            onClick={() => navigate("/main")}
-            className="p-2 hover:bg-slate-100 rounded-xl transition-colors"
-          >
-            <ArrowLeft size={20} className="text-slate-600" />
-          </button>
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-20">
+        <div className="max-w-5xl mx-auto px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
               <Bot size={20} className="text-white" />
             </div>
             <div>
-              <h1 className="text-slate-800 font-semibold text-sm">
+              <h1 className="text-gray-900 font-semibold text-base">
                 AI Health Assistant
               </h1>
-              <p className="text-slate-500 text-xs flex items-center gap-1">
-                <span className="w-2 h-2 bg-green-400 rounded-full"></span>
-                Online • Powered by Medical RAG
+              <p className="text-gray-500 text-xs flex items-center gap-1.5">
+                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                Active
               </p>
             </div>
           </div>
@@ -160,30 +153,29 @@ export default function ChatBot() {
       </header>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-6">
-        <div className="max-w-4xl mx-auto space-y-4">
+      <div className="flex-1 overflow-y-auto px-6 py-8">
+        <div className="max-w-5xl mx-auto space-y-6">
           <AnimatePresence initial={false}>
-            {messages.map((message) => (
+            {messages.map((message, index) => (
               <motion.div
                 key={message.id}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.3 }}
                 className={`flex gap-3 ${
                   message.type === "user" ? "justify-end" : "justify-start"
                 }`}
               >
                 {message.type === "bot" && (
                   <div
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                    className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                       message.isError
                         ? "bg-red-100"
-                        : "bg-gradient-to-br from-blue-500 to-cyan-400"
+                        : "bg-blue-600"
                     }`}
                   >
                     {message.isError ? (
-                      <AlertCircle size={16} className="text-red-500" />
+                      <AlertCircle size={16} className="text-red-600" />
                     ) : (
                       <Bot size={16} className="text-white" />
                     )}
@@ -191,16 +183,16 @@ export default function ChatBot() {
                 )}
 
                 <div
-                  className={`max-w-[75%] ${
+                  className={`max-w-[70%] ${
                     message.type === "user"
-                      ? "bg-gradient-to-br from-blue-500 to-cyan-500 text-white rounded-2xl rounded-tr-md"
+                      ? "bg-blue-600 text-white rounded-2xl rounded-tr-sm"
                       : message.isError
-                      ? "bg-red-50 text-red-700 border border-red-100 rounded-2xl rounded-tl-md"
-                      : "bg-white text-slate-700 border border-slate-100 shadow-sm rounded-2xl rounded-tl-md"
-                  } px-4 py-3`}
+                      ? "bg-red-50 text-red-900 border border-red-200 rounded-2xl rounded-tl-sm"
+                      : "bg-white text-gray-900 border border-gray-200 rounded-2xl rounded-tl-sm"
+                  } px-4 py-3 shadow-sm`}
                 >
                   {message.type === "bot" && !message.isError ? (
-                    <div className="text-sm leading-relaxed space-y-1">
+                    <div className="text-sm leading-relaxed prose prose-sm max-w-none">
                       {formatMarkdownText(message.text)}
                     </div>
                   ) : (
@@ -209,33 +201,25 @@ export default function ChatBot() {
                     </p>
                   )}
                   <div
-                    className={`flex items-center gap-2 mt-2 ${
+                    className={`flex items-center gap-2 mt-2 text-xs ${
                       message.type === "user"
-                        ? "justify-end"
-                        : "justify-start"
+                        ? "justify-end text-blue-100"
+                        : "justify-start text-gray-400"
                     }`}
                   >
                     {message.personalized && (
-                      <span className="text-[10px] bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md flex items-center gap-1 font-medium">
                         <Sparkles size={10} />
                         Personalized
                       </span>
                     )}
-                    <span
-                      className={`text-[10px] ${
-                        message.type === "user"
-                          ? "text-blue-100"
-                          : "text-slate-400"
-                      }`}
-                    >
-                      {formatTime(message.timestamp)}
-                    </span>
+                    <span>{formatTime(message.timestamp)}</span>
                   </div>
                 </div>
 
                 {message.type === "user" && (
-                  <div className="w-8 h-8 rounded-lg bg-slate-200 flex items-center justify-center flex-shrink-0">
-                    <User size={16} className="text-slate-600" />
+                  <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0">
+                    <User size={16} className="text-gray-600" />
                   </div>
                 )}
               </motion.div>
@@ -245,17 +229,17 @@ export default function ChatBot() {
           {/* Loading indicator */}
           {isLoading && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               className="flex gap-3 justify-start"
             >
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
                 <Bot size={16} className="text-white" />
               </div>
-              <div className="bg-white text-slate-700 border border-slate-100 shadow-sm rounded-2xl rounded-tl-md px-4 py-3">
+              <div className="bg-white text-gray-900 border border-gray-200 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
                 <div className="flex items-center gap-2">
-                  <Loader2 size={16} className="animate-spin text-blue-500" />
-                  <span className="text-sm text-slate-500">Thinking...</span>
+                  <Loader2 size={16} className="animate-spin text-blue-600" />
+                  <span className="text-sm text-gray-600">Thinking...</span>
                 </div>
               </div>
             </motion.div>
@@ -267,42 +251,47 @@ export default function ChatBot() {
 
       {/* Error Banner */}
       {error && (
-        <div className="px-4 py-2 bg-red-50 border-t border-red-100">
-          <div className="max-w-4xl mx-auto flex items-center gap-2 text-red-600 text-sm">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="px-6 py-3 bg-red-50 border-t border-red-200"
+        >
+          <div className="max-w-5xl mx-auto flex items-center gap-2 text-red-700 text-sm">
             <AlertCircle size={16} />
-            {error}
+            <span>{error}</span>
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* Input Area */}
-      <div className="bg-white border-t border-slate-100 px-4 py-4">
-        <form onSubmit={handleSendMessage} className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-3 bg-slate-50 rounded-2xl border border-slate-200 focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100 transition-all px-4 py-2">
-            <MessageCircle size={20} className="text-slate-400 flex-shrink-0" />
+      <div className="bg-white border-t border-gray-200 px-6 py-4">
+        <form onSubmit={handleSendMessage} className="max-w-5xl mx-auto">
+          <div className="flex items-center gap-3 bg-white rounded-xl border-2 border-gray-300 px-4 py-3">
+            <MessageCircle size={20} className="text-gray-400 flex-shrink-0" />
             <input
               ref={inputRef}
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="Ask about your health, symptoms, or medical reports..."
-              className="flex-1 bg-transparent border-none outline-none text-sm text-slate-700 placeholder:text-slate-400"
+              className="flex-1 bg-transparent border-none outline-none text-sm text-gray-900 placeholder:text-gray-400"
               disabled={isLoading}
             />
-            <button
+            <motion.button
               type="submit"
               disabled={!inputValue.trim() || isLoading}
-              className={`p-2 rounded-xl transition-all ${
+              whileTap={inputValue.trim() && !isLoading ? { scale: 0.95 } : {}}
+              className={`p-2.5 rounded-lg transition-colors flex-shrink-0 ${
                 inputValue.trim() && !isLoading
-                  ? "bg-gradient-to-br from-blue-500 to-cyan-500 text-white shadow-sm hover:shadow-md"
-                  : "bg-slate-200 text-slate-400 cursor-not-allowed"
+                  ? "bg-blue-600 text-white hover:bg-blue-700"
+                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }`}
             >
               <Send size={18} />
-            </button>
+            </motion.button>
           </div>
-          <p className="text-center text-slate-400 text-xs mt-2">
-            AI responses are for informational purposes only. Always consult a healthcare professional.
+          <p className="text-center text-gray-400 text-xs mt-3">
+            AI responses are for informational purposes. Always consult a healthcare professional.
           </p>
         </form>
       </div>
