@@ -58,54 +58,10 @@ function App() {
       <Route path="/care-plan" element={<ProtectedRoute><SmartCarePlanGenerator /></ProtectedRoute>} />
       <Route path="/doctor/appointments" element={<ProtectedRoute><DoctorAppointment /></ProtectedRoute>} />
       {/* Patient area */}
-      <Route
-        path="/main"
-        element={
-          <PatientRoute>
-            <MainPage />
-          </PatientRoute>
-        }
-      />
+     
 
-      {/* Fitness Dashboard */}
-      <Route
-        path="/fitness-dashboard"
-        element={
-          <PatientRoute>
-            <FitnessDashboard />
-          </PatientRoute>
-        }
-      />
-
-      {/* Assessment - CBT, DBT, PHQ-9 */}
-      <Route
-        path="/assessment"
-        element={
-          <PatientRoute>
-            <Assessment />
-          </PatientRoute>
-        }
-      />
-
-      {/* Chat Bot */}
-      <Route
-        path="/chat"
-        element={
-          <ProtectedRoute>
-            <ChatBot />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Upload Medical Report */}
-      <Route
-        path="/upload-report"
-        element={
-          <ProtectedRoute>
-            <UserReportUpload />
-          </ProtectedRoute>
-        }
-      />
+      
+      
 
       {/* Digital Twin Dashboard */}
       <Route
@@ -117,15 +73,7 @@ function App() {
         }
       />
 
-      {/* Doctor area */}
-      <Route
-        path="/doctor/appointments"
-        element={
-          <DoctorRoute>
-            <DoctorAppointment />
-          </DoctorRoute>
-        }
-      />
+   
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
