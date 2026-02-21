@@ -80,8 +80,13 @@ export default function ChatBot() {
     setError(null);
 
     try {
-      console.log("Sending chat request:", { userId, question: userMessage.text });
-      const response = await mlAPI.chat(userId, userMessage.text);
+      // Collect real-time watch data from localStorage
+      const watchData = localStorage.getItem('fitnessData') 
+        ? JSON.parse(localStorage.getItem('fitnessData')) 
+        : null;
+      
+      console.log("Sending chat request:", { userId, question: userMessage.text, watchData });
+      const response = await mlAPI.chat(userId, userMessage.text, watchData);
       console.log("Chat response received:", response);
 
       const botMessage = {
